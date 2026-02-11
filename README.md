@@ -52,12 +52,18 @@ pip install -e .
 ### 场景 1：生成数据画像报告
 
 ```python
-
 import polars as pl
 from mars.analysis.profiler import MarsDataProfiler
 
-# 1. 加载数据
-df = pl.read_csv("your_data.csv")
+# 1. 构造最小可运行示例数据（也可替换为 pl.read_csv(...)）
+df = pl.DataFrame(
+    {
+        "month": ["2024-01", "2024-01", "2024-02", "2024-02", "2024-03", "2024-03"],
+        "age": [25, 41, 30, None, 36, 52],
+        "income": [5000, 12000, 7000, 6500, -999, 15000],
+        "delinquent": [0, 1, 0, 0, 1, 0],
+    }
+)
 
 # 2. 初始化分析器 (支持自定义缺失值，如 -999)
 profiler = MarsDataProfiler(df, custom_missing_values=[-999, "unknown"])
@@ -72,11 +78,30 @@ report = profiler.generate_profile(
 report.show_overview()  # 在 Jupyter 中查看概览 (含热力图)
 report.show_trend("mean") # 查看均值趋势
 report.write_excel("data_profile_report.xlsx") # 导出为 Excel
+
+# 如果你更偏好 CSV 流程，可用如下 2 行替代上方 DataFrame 构造：
+# df.write_csv("demo_profile.csv")
+# df = pl.read_csv("demo_profile.csv")
 ```
+
+预期成功信号（示例）：
+- `report` 为 `MarsProfileReport` 对象，且可调用 `show_overview()/show_trend()/write_excel()`。
+- 概览表会包含诸如 `feature`, `dtype`, `missing_rate`, `zero_rate`, `unique_n` 等字段（具体列随 `config_overrides` 变化）。
 
 ### 场景 2：快速特征分箱
 ```python
+import pandas as pd
 from mars.feature.binner import MarsNativeBinner, MarsOptimalBinner
+
+# 0. 构造最小训练数据（可直接复制执行）
+X_train = pd.DataFrame(
+    {
+        "age": [23, 35, 41, 52, 46, 28, 33, 39, 61, 48],
+        "income": [4000, 6500, 12000, 18000, 15000, 5200, 8000, 9800, 22000, 16000],
+        "credit_score": [580, 620, 700, 760, 720, 610, 680, 690, 790, 740],
+    }
+)
+y_train = pd.Series([1, 0, 0, 0, 1, 1, 0, 0, 0, 1], name="target")
 
 # --- 方式 A: 快速原生分箱 (适合大规模预处理) ---
 binner = MarsNativeBinner(
@@ -87,6 +112,7 @@ binner = MarsNativeBinner(
 )
 binner.fit(X_train, y_train)
 X_train_binned = binner.transform(X_train)
+print(X_train_binned.head())
 
 # --- 方式 B: 最优分箱 (适合评分卡精细建模) ---
 opt_binner = MarsOptimalBinner(
@@ -98,6 +124,17 @@ opt_binner = MarsOptimalBinner(
 opt_binner.fit(X_train, y_train)
 print(opt_binner.bin_cuts_) # 查看最优切点
 ```
+
+预期输出片段（示例）：
+```python
+{
+  'credit_score': [-inf, 635.0, 710.0, 775.0, inf]
+}
+```
+
+关键字段说明：
+- `bin_cuts_`: `Dict[str, List[float]]`，每个特征对应单调递增切点，通常含 `-inf` 和 `inf` 作为边界。
+- `X_train_binned`: 分箱后的结果，目标列会被映射为分箱索引（整数）或区间标签（取决于实现配置）。
 
 ## 📂 项目结构 (Project Structure)
 ```Plaintext
