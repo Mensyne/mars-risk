@@ -243,7 +243,11 @@ class MarsProfileReport:
         try:
             import xlsxwriter
         except ImportError:
-            logger.error("❌ 'xlsxwriter' is required for Excel export. Install it via: pip install xlsxwriter")
+            logger.error(
+                "❌ Excel export dependency is missing. "
+                "Please install or reinstall package dependencies via: "
+                "pip install mars-risk  (or for local development: pip install -e .)"
+            )
             return
 
         try:
@@ -696,6 +700,17 @@ class MarsEvaluationReport:
             趋势表中时间列的排序方式。True 为时间早的在前，False 为时间晚的在前。
         """
         logger.info(f"📊 Exporting evaluation report to: {path}...")
+
+        try:
+            import xlsxwriter
+        except ImportError:
+            logger.error(
+                "❌ Excel export dependency is missing. "
+                "Please install or reinstall package dependencies via: "
+                "pip install mars-risk  (or for local development: pip install -e .)"
+            )
+            return
+
         try:
             with pd.ExcelWriter(path, engine="xlsxwriter") as writer:
                 # 1. Summary Sheet

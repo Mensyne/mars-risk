@@ -42,6 +42,8 @@ pip install -e .
 
 依赖项: `polars`, `pandas`, `numpy`, `scikit-learn`, `scipy`, `xlsxwriter`, `colorlog`, `optbinning`
 
+> 说明：Excel 导出依赖 `xlsxwriter`，已随 `pip install mars-risk` 或 `pip install -e .` 一并安装，无需额外单独安装。
+
 ## ⚡️ 快速上手 (Quick Start)
 
 ### 场景 1：生成数据画像报告
@@ -123,3 +125,7 @@ mars/
 
 ## 📄 许可证 (License)
 MIT License
+
+## 📝 更新记录 (Recent Updates)
+
+- **v0.0.8+（依赖修复）**：补充并统一 Excel 导出依赖 `xlsxwriter`，同时优化导出报错提示，避免旧环境在调用 `write_excel()` 时因缺失依赖而失败。
