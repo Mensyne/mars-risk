@@ -101,29 +101,31 @@ print(opt_binner.bin_cuts_) # 查看最优切点
 
 ## 📂 项目结构 (Project Structure)
 ```Plaintext
-mars/
-├── analysis/           # 数据分析与画像模块
-│   ├── profiler.py     # MarsDataProfiler 核心逻辑
-│   ├── report.py       # MarsProfileReport 报告容器
-│   └── config.py       # 分析配置类
-├── feature/            # 特征工程模块
-│   ├── binning.py      # NativeBinner & OptimalBinner
-│   ├── encoding.py     # TODO
-│		├── selector.py     # TODO
-│   └── imputer.py      # TODO
-├── risk/               # TODO
-├── metrics/            # 指标计算
-│   └── calculation.py  # TODO
-├── modeling/           # 自动建模流水线（最终幻想）TODO
-│   ├── base.py					# TODO
-│   └── tuner.py        # TODO
-├── scoring/            # 评分量化 TODO
-├── core/               # 核心基类
-│   ├── base.py         # 兼容 Sklearn
-│   └── exceptions.py   # 自定义异常
-└── utils/              # 工具库
-    ├── logger.py       # 全局日志配置
-    └── decorators.py   # 装饰器
+src/mars/
+├── analysis/             # 数据分析与画像模块（已实现）
+│   ├── config.py         # 分析配置类（已实现）
+│   ├── evaluator.py      # 评估器（已实现）
+│   ├── profiler.py       # MarsDataProfiler 核心逻辑（已实现）
+│   └── report.py         # MarsProfileReport 报告容器（已实现）
+├── core/                 # 核心基类与异常（已实现）
+│   ├── base.py           # 兼容 Sklearn 的基类（已实现）
+│   └── exceptions.py     # 自定义异常（已实现）
+├── feature/              # 特征工程模块（已实现）
+│   ├── binner.py         # Native/Optimal 分箱实现（已实现）
+│   └── selector.py       # 特征筛选模块（已实现）
+├── metrics/              # 指标计算模块（已实现）
+│   └── calculation.py    # 指标计算函数（已实现）
+├── modeling/             # 建模流水线模块（已实现）
+│   ├── base.py           # 建模基础抽象（已实现）
+│   ├── strategies.py     # 建模策略实现（已实现）
+│   └── tuner.py          # 调参模块（已实现）
+├── risk/                 # 风险策略模块（计划中，当前仅保留包结构）
+├── scoring/              # 评分量化模块（计划中，当前仅保留包结构）
+└── utils/                # 工具库（已实现）
+    ├── date.py           # 日期处理工具（已实现）
+    ├── decorators.py     # 装饰器工具（已实现）
+    ├── logger.py         # 全局日志配置（已实现）
+    └── plotter.py        # 绘图工具（已实现）
 ```
 
 ## 📄 许可证 (License)
