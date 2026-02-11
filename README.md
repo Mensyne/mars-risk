@@ -30,13 +30,18 @@
 
 ## 📦 安装 (Installation)
 
-```python
-# 推荐使用 pip 安装
+```bash
+# 方式 A（只使用）：安装已发布版本
 pip install mars-risk
 
-# 或者从源码安装
-git clone [https://github.com/leeesq/mars-risk.git](https://github.com/leeesq/mars-risk.git)
+# 方式 B（参与开发）：从源码安装
+git clone https://github.com/leeesq/mars-risk.git
 cd mars-risk
+
+# 最小环境建议：Python 3.10+，并使用虚拟环境隔离依赖
+python -m venv .venv
+source .venv/bin/activate  # Windows PowerShell: .venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
 pip install -e .
 ```
 
